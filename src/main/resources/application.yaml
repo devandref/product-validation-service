@@ -9,8 +9,8 @@ spring:
       product-validation-success: product-validation-success
       product-validation-fail: product-validation-fail
     consumer:
-      group-id: product-validation-group
-      auto-offset-reset: latest
+      group-id: product-validation-group-2
+      auto-offset-reset: earliest
 
   datasource:
     driver-class-name: org.postgresql.Driver
@@ -20,7 +20,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create
       generate-ddl: true
     properties:
       hibernate:

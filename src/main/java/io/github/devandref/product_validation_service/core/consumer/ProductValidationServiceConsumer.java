@@ -1,5 +1,6 @@
 package io.github.devandref.product_validation_service.core.consumer;
 
+import io.github.devandref.product_validation_service.core.service.ProductValidationService;
 import io.github.devandref.product_validation_service.core.utils.JsonUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 public class ProductValidationServiceConsumer {
 
+    private final ProductValidationService productValidationService;
     private final JsonUtil jsonUtil;
 
     @KafkaListener(
@@ -30,7 +32,7 @@ public class ProductValidationServiceConsumer {
     public void consumerProductValidationSuccessEvent(String payload) {
         log.info("Receiving event {} from validation-success topic", payload);
         var event = jsonUtil.toEvent(payload);
-        log.info("Event object {}", event);
+        productValidationService.validateExistingProducts(event);
     }
 
     @KafkaListener(
@@ -40,7 +42,7 @@ public class ProductValidationServiceConsumer {
     public void consumerProductValidationFailEvent(String payload) {
         log.info("Receiving event {} from validation-fail topic", payload);
         var event = jsonUtil.toEvent(payload);
-        log.info("Event object {}", event);
+        productValidationService.rollbackEvent(event);
     }
 
 
